@@ -59,4 +59,13 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return tasks;
     }
+
+    // Mettre à jour une tâche dans la base de données
+    public void updateTask(String oldTask, String newTask) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TASK, newTask);
+        db.update(TABLE_TASKS, values, COLUMN_TASK + " = ?", new String[]{oldTask});
+        db.close();
+    }
 }

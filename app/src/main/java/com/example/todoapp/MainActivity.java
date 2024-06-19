@@ -4,18 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_MODIFY_TASK = 101;
+
     ArrayList<String> tasks = new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    TaskAdapter adapter;
     ListView listView;
     TaskDatabaseHelper dbHelper;
 
@@ -24,22 +27,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         dbHelper = new TaskDatabaseHelper(this);
 
         // Récupérer les tâches depuis la base de données
         tasks = dbHelper.getAllTasks();
 
         listView = findViewById(R.id.tasks_list);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasks);
+        adapter = new TaskAdapter(this, R.layout.row, tasks);
         listView.setAdapter(adapter);
 
         // Écouteur de clic sur les éléments de la liste
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Code à exécuter lorsqu'un élément de la liste est cliqué
-                String selectedTask = tasks.get(position);
-                // Vous pouvez ajouter ici le code pour afficher plus d'informations sur la tâche sélectionnée
+                // Ouvrir ModifyTaskActivity pour modifier la tâche sélectionnée
+                Intent intent = new Intent(MainActivity.this, ModifyTaskActivity.class);
+                intent.putExtra("taskName", tasks.get(position));
+                intent.putExtra("position", position);
+                startActivityForResult(intent, REQUEST_CODE_MODIFY_TASK);
             }
         });
 
@@ -48,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Code à exécuter lorsque le bouton d'ajout de tâche est cliqué
+                // Ouvrir AddTaskActivity pour ajouter une nouvelle tâche
                 Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
                 startActivityForResult(intent, 1);
             }
@@ -57,19 +65,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            // Récupérer la nouvelle tâche ajoutée
+        if (requestCode == REQUEST_CODE_MODIFY_TASK && resultCode == RESULT_OK) {
+            // Mettre à jour la tâche modifiée dans la liste et dans la base de données
+            if (data != null) {
+                String newTaskName = data.getStringExtra("newTaskName");
+                int position = data.getIntExtra("position", -1);
+                if (position != -1 && newTaskName != null) {
+                    tasks.set(position, newTaskName);
+                    adapter.notifyDataSetChanged();
+                    // Mettre à jour la tâche dans la base de données
+                    dbHelper.updateTask(tasks.get(position), newTaskName);
+                }
+            }
+        } else if (requestCode == 1 && resultCode == RESULT_OK) {
+            // Ajouter une nouvelle tâche à la liste et à la base de données
             String newTask = data.getStringExtra("newTask");
             if (newTask != null) {
-                // Ajouter la nouvelle tâche à la base de données
                 dbHelper.addTask(newTask);
-                // Mettre à jour la liste de tâches
                 tasks.clear();
                 tasks.addAll(dbHelper.getAllTasks());
                 adapter.notifyDataSetChanged();
             }
         }
     }
+
 }
