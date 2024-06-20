@@ -5,27 +5,45 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- TextView pour guider l'utilisateur à modifier le nom de la tâche -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nom de la tâche"
+        android:textSize="16sp"
+        android:paddingBottom="8dp" />
+
     <!-- Champ de texte modifiable pour modifier le nom de la tâche -->
     <EditText
         android:id="@+id/editTaskName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Modifier le nom de la tâche" />
+        android:hint="Ex. Faire les courses" />
+
+    <!-- TextView pour guider l'utilisateur à modifier la description de la tâche -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description de la tâche"
+        android:textSize="16sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp" />
 
     <!-- Champ de texte modifiable pour modifier la description de la tâche -->
     <EditText
         android:id="@+id/editTaskDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Modifier la description de la tâche"
-        android:layout_marginTop="16dp" />
+        android:hint="Ex. Acheter de la charcuterie" />
 
     <!-- Bouton de sauvegarde pour enregistrer les modifications -->
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Modifier"
-        android:layout_marginTop="16dp" />
+        android:text="Enregistrer les modifications"
+        android:layout_marginTop="32dp"
+        android:textSize="18sp"
+        android:paddingVertical="12dp" />
 
 </LinearLayout>

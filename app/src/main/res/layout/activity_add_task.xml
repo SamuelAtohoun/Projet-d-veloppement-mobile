@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:height="50dp"
             android:textSize="20dp"
-            android:text="Saisir le nom de la tâche" />
+            android:text="Nom de la tâche" />
 
         <!-- Champ de saisie pour le nom de la tâche -->
         <EditText
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
-            android:hint="Promener le chien" />
+            android:hint="Ex.: Faire les courses" />
 
         <!-- Affichage de texte à l'écran pour la description de la tâche -->
         <TextView
@@ -45,7 +45,7 @@
             android:height="50dp"
             android:textSize="20dp"
             android:layout_marginTop="16dp"
-            android:text="Saisir la description de la tâche" />
+            android:text="Description de la tâche" />
 
         <!-- Champ de saisie pour la description de la tâche -->
         <EditText
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
-            android:hint="Description de la tâche" />
+            android:hint="Ex.: Acheter des fruits, légumes" />
 
         <!-- Bouton de confirmation pour ajouter la tâche -->
         <Button
