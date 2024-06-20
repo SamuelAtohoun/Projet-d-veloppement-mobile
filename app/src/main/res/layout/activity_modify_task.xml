@@ -12,11 +12,20 @@
         android:layout_height="wrap_content"
         android:hint="Modifier le nom de la tâche" />
 
+    <!-- Champ de texte modifiable pour modifier la description de la tâche -->
+    <EditText
+        android:id="@+id/editTaskDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Modifier la description de la tâche"
+        android:layout_marginTop="16dp" />
+
     <!-- Bouton de sauvegarde pour enregistrer les modifications -->
     <Button
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Modifier" />
+        android:text="Modifier"
+        android:layout_marginTop="16dp" />
 
 </LinearLayout>

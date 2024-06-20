@@ -14,10 +14,9 @@
 
     <TextView
         android:id="@+id/task"
-        android:layout_width="87dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginStart="32dp"
         android:layout_marginTop="15dp"
         android:layout_toEndOf="@id/pic"
@@ -25,5 +24,15 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/pic"
+        android:text="Description de la tâche"
+        android:textSize="16sp" />
 
 </RelativeLayout>

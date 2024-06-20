@@ -12,16 +12,16 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class TaskAdapter extends ArrayAdapter<String> {
+public class TaskAdapter extends ArrayAdapter<ToDoTask> {
 
     private Context context;
     private int layoutId;
-    private ArrayList<String> tasks;
+    private ArrayList<ToDoTask> tasks;
 
-    public TaskAdapter(@NonNull Context context, int resource, @NonNull ArrayList<String> tasks) {
+    public TaskAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ToDoTask> tasks) {
         super(context, resource, tasks);
         this.context = context;
-        layoutId = resource;
+        this.layoutId = resource;
         this.tasks = tasks;
     }
 
@@ -36,19 +36,22 @@ public class TaskAdapter extends ArrayAdapter<String> {
             row = inflater.inflate(layoutId, parent, false);
 
             holder = new ViewHolder();
-            holder.taskView = row.findViewById(R.id.task);
+            holder.taskNameView = row.findViewById(R.id.task);
+            holder.taskDescriptionView = row.findViewById(R.id.description);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
         }
 
-        String task = tasks.get(position);
-        holder.taskView.setText(task);
+        ToDoTask task = tasks.get(position);
+        holder.taskNameView.setText(task.getName());
+        holder.taskDescriptionView.setText(task.getDescription());
 
         return row;
     }
 
     static class ViewHolder {
-        TextView taskView;
+        TextView taskNameView;
+        TextView taskDescriptionView;
     }
 }

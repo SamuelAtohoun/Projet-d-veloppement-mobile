@@ -19,9 +19,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
+        android:layout_below="@id/toolbar"
         android:layout_centerInParent="true">
 
-        <!-- Affichage de texte à l'écran -->
+        <!-- Affichage de texte à l'écran pour le nom de la tâche -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +30,7 @@
             android:textSize="20dp"
             android:text="Saisir le nom de la tâche" />
 
-        <!-- Champ de saisie -->
+        <!-- Champ de saisie pour le nom de la tâche -->
         <EditText
             android:id="@+id/newTask"
             android:layout_width="match_parent"
@@ -37,10 +38,29 @@
             android:minHeight="48dp"
             android:hint="Promener le chien" />
 
+        <!-- Affichage de texte à l'écran pour la description de la tâche -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:height="50dp"
+            android:textSize="20dp"
+            android:layout_marginTop="16dp"
+            android:text="Saisir la description de la tâche" />
+
+        <!-- Champ de saisie pour la description de la tâche -->
+        <EditText
+            android:id="@+id/newTaskDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:hint="Description de la tâche" />
+
+        <!-- Bouton de confirmation pour ajouter la tâche -->
         <Button
             android:id="@+id/confirmAddButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Ajouter" />
     </LinearLayout>
 </RelativeLayout>

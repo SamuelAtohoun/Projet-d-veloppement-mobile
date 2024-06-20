@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AddTaskActivity extends AppCompatActivity {
 
     private EditText newTaskEditText;
+    private EditText newTaskDescriptionEditText;
     private Button confirmAddButton;
 
     @Override
@@ -21,20 +22,23 @@ public class AddTaskActivity extends AppCompatActivity {
 
         // Récupération des références des éléments de l'interface utilisateur
         newTaskEditText = findViewById(R.id.newTask);
+        newTaskDescriptionEditText = findViewById(R.id.newTaskDescription); // Nouveau champ pour la description
         confirmAddButton = findViewById(R.id.confirmAddButton);
 
         // Définition de l'événement au clic sur le bouton "Ajouter"
         confirmAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Récupération de la tâche saisie par l'utilisateur
+                // Récupération de la tâche et de la description saisies par l'utilisateur
                 String task = newTaskEditText.getText().toString().trim();
+                String description = newTaskDescriptionEditText.getText().toString().trim();
 
                 // Vérification si le champ de la tâche n'est pas vide
                 if (!task.isEmpty()) {
-                    // Retourner la nouvelle tâche à MainActivity
+                    // Retourner la nouvelle tâche et la description à MainActivity
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("newTask", task);
+                    resultIntent.putExtra("newTaskName", task);
+                    resultIntent.putExtra("newTaskDescription", description);
                     setResult(RESULT_OK, resultIntent);
                     finish();
                 } else {

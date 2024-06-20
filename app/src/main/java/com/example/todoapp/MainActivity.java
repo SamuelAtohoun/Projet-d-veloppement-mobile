@@ -16,8 +16,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_MODIFY_TASK = 101;
+    private static final int REQUEST_CODE_ADD_TASK = 102; // Correction de la constante de demande
 
-    ArrayList<String> tasks = new ArrayList<>();
+    ArrayList<ToDoTask> tasks = new ArrayList<>();
     TaskAdapter adapter;
     ListView listView;
     TaskDatabaseHelper dbHelper;
@@ -45,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Ouvrir ModifyTaskActivity pour modifier la tâche sélectionnée
                 Intent intent = new Intent(MainActivity.this, ModifyTaskActivity.class);
-                intent.putExtra("taskName", tasks.get(position));
+                intent.putExtra("taskId", tasks.get(position).getId());
+                intent.putExtra("taskName", tasks.get(position).getName());
+                intent.putExtra("taskDescription", tasks.get(position).getDescription());
                 intent.putExtra("position", position);
                 startActivityForResult(intent, REQUEST_CODE_MODIFY_TASK);
             }
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Ouvrir AddTaskActivity pour ajouter une nouvelle tâche
                 Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, REQUEST_CODE_ADD_TASK); // Utilisation de la constante corrigée
             }
         });
 
@@ -70,25 +73,29 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_MODIFY_TASK && resultCode == RESULT_OK) {
             // Mettre à jour la tâche modifiée dans la liste et dans la base de données
             if (data != null) {
+                int taskId = data.getIntExtra("taskId", -1);
                 String newTaskName = data.getStringExtra("newTaskName");
+                String newTaskDescription = data.getStringExtra("newTaskDescription");
                 int position = data.getIntExtra("position", -1);
-                if (position != -1 && newTaskName != null) {
-                    tasks.set(position, newTaskName);
+                if (position != -1 && newTaskName != null && newTaskDescription != null) {
+                    ToDoTask task = tasks.get(position);
+                    task.setName(newTaskName);
+                    task.setDescription(newTaskDescription);
                     adapter.notifyDataSetChanged();
                     // Mettre à jour la tâche dans la base de données
-                    dbHelper.updateTask(tasks.get(position), newTaskName);
+                    dbHelper.updateTask(taskId, newTaskName, newTaskDescription);
                 }
             }
-        } else if (requestCode == 1 && resultCode == RESULT_OK) {
+        } else if (requestCode == REQUEST_CODE_ADD_TASK && resultCode == RESULT_OK) { // Utilisation de la constante corrigée
             // Ajouter une nouvelle tâche à la liste et à la base de données
-            String newTask = data.getStringExtra("newTask");
-            if (newTask != null) {
-                dbHelper.addTask(newTask);
+            String newTaskName = data.getStringExtra("newTaskName");
+            String newTaskDescription = data.getStringExtra("newTaskDescription");
+            if (newTaskName != null && newTaskDescription != null) {
+                dbHelper.addTask(newTaskName, newTaskDescription);
                 tasks.clear();
                 tasks.addAll(dbHelper.getAllTasks());
                 adapter.notifyDataSetChanged();
             }
         }
     }
-
 }
