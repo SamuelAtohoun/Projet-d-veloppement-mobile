@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
         fab = findViewById(R.id.fab);
-        ImageView filterIcon = findViewById(R.id.icon); // ImageView for filter icon
+        ImageView filterIcon = findViewById(R.id.icon);
 
         taskList = new ArrayList<>();
         filteredTaskList = new ArrayList<>();
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(adapter);
 
-        // Click listener for list item
+
         listView.setOnItemClickListener((parent, view, position, id) -> {
             ToDoTask task = filteredTaskList.get(position);
             Intent intent = new Intent(MainActivity.this, ModifyTaskActivity.class);
@@ -56,16 +56,16 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE_MODIFY_TASK);
         });
 
-        // Click listener for FAB
+
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
             startActivityForResult(intent, REQUEST_CODE_ADD_TASK);
         });
 
-        // Click listener for filter icon
+
         filterIcon.setOnClickListener(v -> applyFilter(currentFilter));
 
-        // Initially apply filter to show all tasks
+
         applyFilter(currentFilter);
     }
 

@@ -4,7 +4,7 @@ public class ToDoTask {
     private int id;
     private String name;
     private String description;
-    private String status; // Ajout du champ status
+    private String status; // Champ "Status" pour les filtres
 
     public ToDoTask(int id, String name, String description, String status) {
         this.id = id;
