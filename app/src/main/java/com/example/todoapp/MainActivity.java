@@ -2,26 +2,35 @@ package com.example.todoapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.todoapp.AddTaskActivity;
+import com.example.todoapp.ModifyTaskActivity;
+import com.example.todoapp.TaskAdapter;
+import com.example.todoapp.ToDoTask;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE_MODIFY_TASK = 101;
-    private static final int REQUEST_CODE_ADD_TASK = 102; // Correction de la constante de demande
 
-    ArrayList<ToDoTask> tasks = new ArrayList<>();
-    TaskAdapter adapter;
-    ListView listView;
-    TaskDatabaseHelper dbHelper;
+    private static final int REQUEST_CODE_ADD_TASK = 1;
+    private static final int REQUEST_CODE_MODIFY_TASK = 2;
+
+    private ListView listView;
+    private FloatingActionButton fab;
+    private TaskAdapter adapter;
+    private List<ToDoTask> taskList;
+    private List<ToDoTask> filteredTaskList;
+    private String currentFilter = "Tous"; // Filtre par défaut
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,71 +40,103 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        dbHelper = new TaskDatabaseHelper(this);
+        listView = findViewById(R.id.listView);
+        fab = findViewById(R.id.fab);
+        ImageView filterIcon = findViewById(R.id.icon); // ImageView for filter icon
 
-        // Récupérer les tâches depuis la base de données
-        tasks = dbHelper.getAllTasks();
+        taskList = new ArrayList<>();
+        filteredTaskList = new ArrayList<>();
+        adapter = new TaskAdapter(this, filteredTaskList);
 
-        listView = findViewById(R.id.tasks_list);
-        adapter = new TaskAdapter(this, R.layout.row, tasks);
         listView.setAdapter(adapter);
 
-        // Écouteur de clic sur les éléments de la liste
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Ouvrir ModifyTaskActivity pour modifier la tâche sélectionnée
-                Intent intent = new Intent(MainActivity.this, ModifyTaskActivity.class);
-                intent.putExtra("taskId", tasks.get(position).getId());
-                intent.putExtra("taskName", tasks.get(position).getName());
-                intent.putExtra("taskDescription", tasks.get(position).getDescription());
-                intent.putExtra("position", position);
-                startActivityForResult(intent, REQUEST_CODE_MODIFY_TASK);
-            }
+        // Click listener for list item
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            ToDoTask task = filteredTaskList.get(position);
+            Intent intent = new Intent(MainActivity.this, ModifyTaskActivity.class);
+            intent.putExtra("taskName", task.getName());
+            intent.putExtra("taskDescription", task.getDescription());
+            intent.putExtra("taskStatus", task.getStatus());
+            intent.putExtra("position", position);
+            startActivityForResult(intent, REQUEST_CODE_MODIFY_TASK);
         });
 
-        FloatingActionButton addButton = findViewById(R.id.addButton);
-        // Écouteur de clic sur le bouton d'ajout de tâche
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Ouvrir AddTaskActivity pour ajouter une nouvelle tâche
-                Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_ADD_TASK); // Utilisation de la constante corrigée
-            }
+        // Click listener for FAB
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_ADD_TASK);
         });
 
+        // Click listener for filter icon
+        filterIcon.setOnClickListener(v -> applyFilter(currentFilter));
+
+        // Initially apply filter to show all tasks
+        applyFilter(currentFilter);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_MODIFY_TASK && resultCode == RESULT_OK) {
-            // Mettre à jour la tâche modifiée dans la liste et dans la base de données
-            if (data != null) {
-                int taskId = data.getIntExtra("taskId", -1);
+
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == REQUEST_CODE_ADD_TASK) {
                 String newTaskName = data.getStringExtra("newTaskName");
                 String newTaskDescription = data.getStringExtra("newTaskDescription");
+                String newTaskStatus = data.getStringExtra("newTaskStatus");
+
+                ToDoTask newTask = new ToDoTask(taskList.size(), newTaskName, newTaskDescription, newTaskStatus);
+                taskList.add(newTask);
+                applyFilter(currentFilter);
+            } else if (requestCode == REQUEST_CODE_MODIFY_TASK) {
+                String updatedTaskName = data.getStringExtra("updatedTaskName");
+                String updatedTaskDescription = data.getStringExtra("updatedTaskDescription");
+                String updatedTaskStatus = data.getStringExtra("updatedTaskStatus");
                 int position = data.getIntExtra("position", -1);
-                if (position != -1 && newTaskName != null && newTaskDescription != null) {
-                    ToDoTask task = tasks.get(position);
-                    task.setName(newTaskName);
-                    task.setDescription(newTaskDescription);
-                    adapter.notifyDataSetChanged();
-                    // Mettre à jour la tâche dans la base de données
-                    dbHelper.updateTask(taskId, newTaskName, newTaskDescription);
+
+                if (position != -1) {
+                    ToDoTask task = filteredTaskList.get(position);
+                    task.setName(updatedTaskName);
+                    task.setDescription(updatedTaskDescription);
+                    task.setStatus(updatedTaskStatus);
+                    applyFilter(currentFilter);
                 }
             }
-        } else if (requestCode == REQUEST_CODE_ADD_TASK && resultCode == RESULT_OK) { // Utilisation de la constante corrigée
-            // Ajouter une nouvelle tâche à la liste et à la base de données
-            String newTaskName = data.getStringExtra("newTaskName");
-            String newTaskDescription = data.getStringExtra("newTaskDescription");
-            if (newTaskName != null && newTaskDescription != null) {
-                dbHelper.addTask(newTaskName, newTaskDescription);
-                tasks.clear();
-                tasks.addAll(dbHelper.getAllTasks());
-                adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.filter_all) {
+            currentFilter = "Tous";
+        } else if (id == R.id.filter_todo) {
+            currentFilter = "À faire";
+        } else if (id == R.id.filter_in_progress) {
+            currentFilter = "En cours";
+        } else if (id == R.id.filter_done) {
+            currentFilter = "Fait";
+        } else if (id == R.id.filter_bug) {
+            currentFilter = "Bug";
+        }
+
+        applyFilter(currentFilter);
+        return true;
+    }
+
+    private void applyFilter(String filter) {
+        filteredTaskList.clear();
+        for (ToDoTask task : taskList) {
+            if (filter.equals("Tous") || task.getStatus().equalsIgnoreCase(filter)) {
+                filteredTaskList.add(task);
             }
         }
+        adapter.notifyDataSetChanged();
     }
 }

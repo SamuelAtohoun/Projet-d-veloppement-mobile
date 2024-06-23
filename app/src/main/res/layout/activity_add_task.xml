@@ -1,16 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:title="Todo App"
+        android:title="Ajouter une tâche"
         android:titleTextColor="@android:color/white"
         android:layout_alignParentTop="true"/>
 
@@ -22,7 +20,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Affichage de texte à l'écran pour le nom de la tâche -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +27,6 @@
             android:text="Nom de la tâche"
             android:textSize="20dp" />
 
-        <!-- Champ de saisie pour le nom de la tâche -->
         <EditText
             android:id="@+id/newTask"
             android:layout_width="match_parent"
@@ -38,7 +34,6 @@
             android:hint="Ex.: Faire les courses"
             android:minHeight="48dp" />
 
-        <!-- Affichage de texte à l'écran pour la description de la tâche -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +42,6 @@
             android:text="Description de la tâche"
             android:textSize="20dp" />
 
-        <!-- Champ de saisie pour la description de la tâche -->
         <EditText
             android:id="@+id/newTaskDescription"
             android:layout_width="match_parent"
@@ -55,7 +49,20 @@
             android:hint="Ex.: Acheter des fruits, légumes"
             android:minHeight="48dp" />
 
-        <!-- Bouton de confirmation pour ajouter la tâche -->
+        <!-- Nouveau Spinner pour sélectionner le statut -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:height="50dp"
+            android:text="Statut"
+            android:textSize="20dp" />
+
+        <Spinner
+            android:id="@+id/statusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/confirmAddButton"
             android:layout_width="match_parent"

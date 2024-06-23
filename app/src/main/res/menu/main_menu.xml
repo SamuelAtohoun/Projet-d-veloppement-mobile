@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filter_all"
+        android:title="Tous"/>
+    <item
+        android:id="@+id/filter_todo"
+        android:title="À faire"/>
+    <item
+        android:id="@+id/filter_in_progress"
+        android:title="En cours"/>
+    <item
+        android:id="@+id/filter_done"
+        android:title="Fait"/>
+    <item
+        android:id="@+id/filter_bug"
+        android:title="Bug"/>
+</menu>

@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- TextView pour guider l'utilisateur à modifier le nom de la tâche -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,14 +11,12 @@
         android:textSize="16sp"
         android:paddingBottom="8dp" />
 
-    <!-- Champ de texte modifiable pour modifier le nom de la tâche -->
     <EditText
         android:id="@+id/editTaskName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Ex. Faire les courses" />
 
-    <!-- TextView pour guider l'utilisateur à modifier la description de la tâche -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,14 +25,25 @@
         android:paddingTop="16dp"
         android:paddingBottom="8dp" />
 
-    <!-- Champ de texte modifiable pour modifier la description de la tâche -->
     <EditText
         android:id="@+id/editTaskDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Ex. Acheter de la charcuterie" />
 
-    <!-- Bouton de sauvegarde pour enregistrer les modifications -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Statut de la tâche"
+        android:textSize="16sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/editTaskStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"

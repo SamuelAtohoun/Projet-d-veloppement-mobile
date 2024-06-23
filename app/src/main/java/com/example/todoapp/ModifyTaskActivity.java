@@ -3,8 +3,10 @@ package com.example.todoapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,44 +14,54 @@ public class ModifyTaskActivity extends AppCompatActivity {
 
     private EditText editTaskName;
     private EditText editTaskDescription;
+    private Spinner editTaskStatus;
     private Button saveButton;
     private int position;
+    private String[] statuses = {"Todo", "In Progress", "Done", "Bug"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_task);
 
-        // Initialiser les vues
         editTaskName = findViewById(R.id.editTaskName);
         editTaskDescription = findViewById(R.id.editTaskDescription);
+        editTaskStatus = findViewById(R.id.editTaskStatus);
         saveButton = findViewById(R.id.saveButton);
 
-        // Récupérer le nom de la tâche, la description et la position depuis l'intent
-        String taskName = getIntent().getStringExtra("taskName");
-        String taskDescription = getIntent().getStringExtra("taskDescription");
-        position = getIntent().getIntExtra("position", -1);
+        Intent intent = getIntent();
+        String taskName = intent.getStringExtra("taskName");
+        String taskDescription = intent.getStringExtra("taskDescription");
+        String taskStatus = intent.getStringExtra("taskStatus");
+        position = intent.getIntExtra("position", -1);
 
-        // Afficher le nom de la tâche et la description dans les champs de texte
         editTaskName.setText(taskName);
         editTaskDescription.setText(taskDescription);
 
-        // Ajouter un écouteur de clic au bouton de sauvegarde
+        // Configurer le Spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, statuses);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editTaskStatus.setAdapter(adapter);
+
+        if (taskStatus != null) {
+            int spinnerPosition = adapter.getPosition(taskStatus);
+            editTaskStatus.setSelection(spinnerPosition);
+        }
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Récupérer le nouveau nom et la nouvelle description de la tâche modifiée
-                String newTaskName = editTaskName.getText().toString().trim();
-                String newTaskDescription = editTaskDescription.getText().toString().trim();
-                if (!newTaskName.isEmpty() && !newTaskDescription.isEmpty()) {
-                    // Créer un intent pour renvoyer le nouveau nom et la nouvelle description de la tâche à MainActivity
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("newTaskName", newTaskName);
-                    resultIntent.putExtra("newTaskDescription", newTaskDescription);
-                    resultIntent.putExtra("position", position);
-                    setResult(RESULT_OK, resultIntent);
-                    finish(); // Fermer l'activité
-                }
+                String updatedTaskName = editTaskName.getText().toString().trim();
+                String updatedTaskDescription = editTaskDescription.getText().toString().trim();
+                String updatedTaskStatus = editTaskStatus.getSelectedItem().toString();
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("updatedTaskName", updatedTaskName);
+                resultIntent.putExtra("updatedTaskDescription", updatedTaskDescription);
+                resultIntent.putExtra("updatedTaskStatus", updatedTaskStatus);
+                resultIntent.putExtra("position", position);
+                setResult(RESULT_OK, resultIntent);
+                finish();
             }
         });
     }
