@@ -1,16 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/filter_all"
-        android:title="Tous"/>
+        android:title="All"/>
     <item
         android:id="@+id/filter_todo"
-        android:title="À faire"/>
+        android:title="Todo"/>
     <item
         android:id="@+id/filter_in_progress"
-        android:title="En cours"/>
+        android:title="In Progress"/>
     <item
         android:id="@+id/filter_done"
-        android:title="Fait"/>
+        android:title="Done"/>
     <item
         android:id="@+id/filter_bug"
         android:title="Bug"/>

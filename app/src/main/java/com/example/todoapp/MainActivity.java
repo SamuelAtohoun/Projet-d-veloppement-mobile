@@ -10,11 +10,6 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import com.example.todoapp.AddTaskActivity;
-import com.example.todoapp.ModifyTaskActivity;
-import com.example.todoapp.TaskAdapter;
-import com.example.todoapp.ToDoTask;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -115,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.filter_all) {
-            currentFilter = "Tous";
+            currentFilter = "All";
         } else if (id == R.id.filter_todo) {
-            currentFilter = "À faire";
+            currentFilter = "Todo";
         } else if (id == R.id.filter_in_progress) {
-            currentFilter = "En cours";
+            currentFilter = "In Progress";
         } else if (id == R.id.filter_done) {
-            currentFilter = "Fait";
+            currentFilter = "Done";
         } else if (id == R.id.filter_bug) {
             currentFilter = "Bug";
         }
@@ -133,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     private void applyFilter(String filter) {
         filteredTaskList.clear();
         for (ToDoTask task : taskList) {
-            if (filter.equals("Tous") || task.getStatus().equalsIgnoreCase(filter)) {
+            if (filter.equals("All") || task.getStatus().equalsIgnoreCase(filter)) {
                 filteredTaskList.add(task);
             }
         }
