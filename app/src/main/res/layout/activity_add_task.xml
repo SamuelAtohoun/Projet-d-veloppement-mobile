@@ -17,43 +17,43 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
         android:layout_below="@id/toolbar"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <!-- Affichage de texte à l'écran pour le nom de la tâche -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:height="50dp"
-            android:textSize="20dp"
-            android:text="Nom de la tâche" />
+            android:text="Nom de la tâche"
+            android:textSize="20dp" />
 
         <!-- Champ de saisie pour le nom de la tâche -->
         <EditText
             android:id="@+id/newTask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="Ex.: Faire les courses" />
+            android:hint="Ex.: Faire les courses"
+            android:minHeight="48dp" />
 
         <!-- Affichage de texte à l'écran pour la description de la tâche -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:height="50dp"
-            android:textSize="20dp"
             android:layout_marginTop="16dp"
-            android:text="Description de la tâche" />
+            android:height="50dp"
+            android:text="Description de la tâche"
+            android:textSize="20dp" />
 
         <!-- Champ de saisie pour la description de la tâche -->
         <EditText
             android:id="@+id/newTaskDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="Ex.: Acheter des fruits, légumes" />
+            android:hint="Ex.: Acheter des fruits, légumes"
+            android:minHeight="48dp" />
 
         <!-- Bouton de confirmation pour ajouter la tâche -->
         <Button
